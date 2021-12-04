@@ -8,8 +8,6 @@ def freq_map_by_position(numbers: List[List[int]]) -> Dict[int, Dict[int, int]]:
         for i, digit in enumerate(number):
             if i not in result:
                 result[i] = {0: 0, 1: 0}
-            if digit not in result[i]:
-                result[i][digit] = 0
             result[i][digit] += 1
     return result
 
@@ -30,13 +28,11 @@ def main(filename: str) -> None:
 
 
 def part_2(numbers: List[List[int]]) -> None:
-    # Compute oxygen generator rating.
     oxy_str = "".join(str(n) for n in oxygen_generator(numbers))
     co2_str = "".join(str(n) for n in co2_scrubber(numbers))
     oxy = int(oxy_str, 2)
     co2 = int(co2_str, 2)
     print(f"oxy: {oxy}, co2: {co2}, result: {co2 * oxy}")
-    # Find most common for first position.
 
 
 def oxygen_generator(numbers: List[List[int]]) -> List[int]:
