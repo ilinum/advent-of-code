@@ -10,9 +10,6 @@ class Node:
     def add_edge(self, node: str) -> None:
         self.edges.add(node)
 
-    def can_visit_multiple_times(self) -> bool:
-        return self.name.isupper()
-
     def __repr__(self) -> str:
         return self.name
 
@@ -76,7 +73,7 @@ class Graph:
                        cur_path: Tuple = (),
                        ) -> None:
         if cur == "end":
-            paths.append(tuple(cur_path))
+            paths.append(cur_path)
             return
 
         if not self.visited.can_visit(cur):
