@@ -14,7 +14,7 @@ class Packet(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def compute(self) -> int:
+    def value(self) -> int:
         raise NotImplementedError()
 
 
@@ -33,7 +33,7 @@ class LiteralPacket(Packet):
         # Literal packet never has subpackets.
         return []
 
-    def compute(self) -> int:
+    def value(self) -> int:
         return self.val
 
 
@@ -49,8 +49,8 @@ class OperatorPacket(Packet):
     def subpackets(self) -> List["Packet"]:
         return self._subpackets
 
-    def compute(self) -> int:
-        values = [p.compute() for p in self.subpackets()]
+    def value(self) -> int:
+        values = [p.value() for p in self.subpackets()]
         if self.type_id == 0:
             return sum(values)
         elif self.type_id == 1:
@@ -128,7 +128,7 @@ def main(lines: List[str]) -> None:
     for line in lines:
         root = parse_packet(io.StringIO(hex_to_binary(line)))
         print(sum(get_versions(root)))
-        print(root.compute())
+        print(root.value())
 
 
 if __name__ == '__main__':
