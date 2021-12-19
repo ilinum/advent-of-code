@@ -10,6 +10,7 @@ class Number(ABC):
     def magnitude(self) -> int:
         raise NotImplementedError()
 
+    @abstractmethod
     def try_explode(
             self,
             depth: int,
