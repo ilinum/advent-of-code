@@ -2,3 +2,5 @@
 **/*.rs.bk
 .idea/
 *.iml
+.mypy_cache/
+__pycache__/
