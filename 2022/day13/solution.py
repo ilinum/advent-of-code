@@ -1,4 +1,5 @@
 import functools
+import json
 import os
 from dataclasses import dataclass
 from typing import Union
@@ -37,30 +38,12 @@ def compare(p1: Packet, p2: Packet) -> int:
     return compare(LiteralPacket(len(p1.subpackets)), LiteralPacket(len(p2.subpackets)))
 
 
-def parse_packet(line: str) -> Packet:
-    if line.startswith("["):
-        assert line.endswith("]")
-        line = line[1:len(line) - 1]
-        subpackets = []
-        buf = ""
-        opens = 0
-        for c in line:
-            if c == "[":
-                opens += 1
-                buf += c
-            elif c == "]":
-                opens -= 1
-                buf += c
-            elif c == "," and opens == 0:
-                subpackets.append(parse_packet(buf))
-                buf = ""
-            else:
-                buf += c
-        if len(buf) > 0:
-            subpackets.append(parse_packet(buf))
-        return ListPacket(subpackets=subpackets)
-    else:
-        return LiteralPacket(int(line))
+def parse_packet(obj: object) -> Packet:
+    if isinstance(obj, list):
+        subpackets = [parse_packet(e) for e in obj]
+        return ListPacket(subpackets)
+    assert isinstance(obj, str) or isinstance(obj, int)
+    return LiteralPacket(int(obj))
 
 
 def solve_p1(lines: list[str]) -> None:
@@ -72,7 +55,7 @@ def solve_p1(lines: list[str]) -> None:
             pairs.append((buf[0], buf[1]))
             buf = []
             continue
-        buf.append(parse_packet(line))
+        buf.append(parse_packet(json.loads(line)))
     if len(buf) > 0:
         assert len(buf) == 2
         pairs.append((buf[0], buf[1]))
@@ -88,8 +71,8 @@ def solve_p2(lines: list[str]) -> None:
     packets = []
     for line in lines:
         if len(line) > 0:
-            packets.append(parse_packet(line))
-    dividers = [parse_packet("[[2]]"), parse_packet("[[6]]")]
+            packets.append(parse_packet(json.loads(line)))
+    dividers = [parse_packet(json.loads("[[2]]")), parse_packet(json.loads("[[6]]"))]
     packets.extend(dividers)
     packets = sorted(packets, key=functools.cmp_to_key(lambda x, y: compare(x, y)))
     divider_idx = [packets.index(d) + 1 for d in dividers]
