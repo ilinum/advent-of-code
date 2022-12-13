@@ -113,7 +113,7 @@ def main() -> None:
             process_file(f)
 
 
-# Part 1:
-# Part 2:
+# Part 1: 00:34:53
+# Part 2: 00:41:39
 if __name__ == '__main__':
     main()
