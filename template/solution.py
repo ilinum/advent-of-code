@@ -12,7 +12,7 @@ def solve_p2(lines: list[str]) -> object:
 def process_file(filename: str) -> None:
     print(f"processing '{filename}'")
     with open(filename, "r") as f:
-        lines = list(map(lambda x: x.strip().lower(), f.readlines()))
+        lines = list(map(lambda x: x.strip(), f.readlines()))
     start = time.time()
     print(solve_p1(lines))
     print(solve_p2(lines))
